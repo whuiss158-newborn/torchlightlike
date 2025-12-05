@@ -14,9 +14,9 @@ texture = ExtResource("1_a02cp")
 region_enabled = true
 region_rect = Rect2(-1000, -1000, 2000, 1000)
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("2_go701")]
+[node name="player" parent="." instance=ExtResource("2_go701")]
 position = Vector2(-1, -1)
 motion_mode = 1
 
-[node name="CharacterBody2D2" parent="." instance=ExtResource("3_5a7ea")]
+[node name="enemy" parent="." instance=ExtResource("3_5a7ea")]
 position = Vector2(422, 235)
