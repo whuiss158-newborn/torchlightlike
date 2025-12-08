@@ -1,13 +1,25 @@
-[gd_scene load_steps=4 format=3 uid="uid://cqm4co2w6pn2i"]
+[gd_scene load_steps=6 format=3 uid="uid://cqm4co2w6pn2i"]
 
 [ext_resource type="Script" uid="uid://upttxo8nk0t" path="res://Scripts/enemy.gd" id="1_1f0kj"]
 [ext_resource type="Texture2D" uid="uid://bmh8exiawq0vo" path="res://Assets/Textures/Enemy/giant_amoeba_new.png" id="1_hghv2"]
+[ext_resource type="PackedScene" uid="uid://btw7cb8qxp120" path="res://Scenes/hit_box.tscn" id="2_afpow"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_287tu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1f0kj"]
 
 [node name="enemy" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_1f0kj")
+
+[node name="HitBox" parent="." instance=ExtResource("2_afpow")]
+
+[node name="CollisionShape2D" parent="HitBox" index="0"]
+position = Vector2(-1, 1)
+shape = SubResource("RectangleShape2D_287tu")
+debug_color = Color(0.89720875, 0.24350217, 0.518455, 0.41960785)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_hghv2")
@@ -15,3 +27,5 @@ texture = ExtResource("1_hghv2")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 2)
 shape = SubResource("CircleShape2D_1f0kj")
+
+[editable path="HitBox"]
