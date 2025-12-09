@@ -14,7 +14,6 @@ func movement():
 	elif mov.x < 0:
 		sprite.flip_h = false
 	velocity = mov.normalized() * SPEED
-	print(velocity)
 	move_and_slide()
 
 func _physics_process(delta: float) -> void:

@@ -7,7 +7,7 @@ extends Area2D
 signal take_damage(damage: int)
 
 func _on_area_entered(area: Area2D) -> void:
-	if area.is_in_group("attact"):
+	if area.is_in_group("attack"):
 		if not area.get("damage") == null:
 			match HurtBoxType:
 				0: #Cooldown

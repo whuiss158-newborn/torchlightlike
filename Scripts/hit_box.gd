@@ -6,6 +6,7 @@ extends Node
 
 func disableNow():
 	collision_shape_2d.set_deferred("disabled", true)
+	print("call dis")
 	disable_timer.start()
 
 
