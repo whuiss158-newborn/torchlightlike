@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://blohcjc0572e2"]
+
+[ext_resource type="Texture2D" uid="uid://7caxkjg4w4h0" path="res://Assets/Textures/Items/Weapons/ice_spear.png" id="1_257mq"]
+[ext_resource type="Script" uid="uid://yvmyv15t65wl" path="res://Scripts/ice_spear.gd" id="1_kjfcc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_257mq"]
+size = Vector2(33.234024, 7.071069)
+
+[node name="IceSpear" type="Area2D" groups=["attack"]]
+top_level = true
+scale = Vector2(0.1, 0.1)
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("1_kjfcc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.24999985, -0.7500005)
+rotation = 0.7853982
+scale = Vector2(0.9999999, 0.9999999)
+shape = SubResource("RectangleShape2D_257mq")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_257mq")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rotation = 0.7853982
+rect = Rect2(-16.830051, -4.375261, 33.25833, 7.545207)
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

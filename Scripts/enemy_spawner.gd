@@ -27,8 +27,11 @@ func spawn_one_enemy():
 	var spawn_pos = _get_safe_spawn_position()
 	if spawn_pos == Vector2.INF:
 		return
-	print(spawn_pos)
-	  
+	var enemy_ins = enemy_scene.instantiate()
+	enemy_ins.global_position = spawn_pos
+	add_child(enemy_ins)
+	enemy_pool.append(enemy_ins)
+	
 
 func _get_safe_spawn_position() -> Vector2:
 	# 最多尝试10次（避免无限循环），优先找无障碍物的位置
@@ -38,7 +41,7 @@ func _get_safe_spawn_position() -> Vector2:
 		# 随机距离（介于最小玩家距离和最大半径之间）
 		var random_dis = randf_range(min_player_distance, spawn_radius)
 		# 计算候选位置
-		var candidate_pos = player.position + random_dir * random_dis
+		var candidate_pos = player.global_position + random_dir * random_dis
 		
 		# 检测位置是否有障碍物 todo
 		return candidate_pos

@@ -11,6 +11,7 @@
 texture_filter = 1
 texture_repeat = 2
 position = Vector2(0, 2)
+scale = Vector2(2, 2)
 texture = ExtResource("1_a02cp")
 region_enabled = true
 region_rect = Rect2(-1000, -1000, 2000, 1000)
@@ -22,6 +23,3 @@ motion_mode = 1
 [node name="EnemySpawner" parent="." node_paths=PackedStringArray("player") instance=ExtResource("3_8j60k")]
 enemy_scene = ExtResource("3_5a7ea")
 player = NodePath("../player")
-
-[node name="enemy" parent="." instance=ExtResource("3_5a7ea")]
-position = Vector2(422, 235)
