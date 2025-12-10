@@ -27,7 +27,7 @@ func _ready() -> void:
 	tween.tween_property(self, "scale", Vector2(1, 1) * attack_size, 1).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	tween.play()
 			
-func	 _physics_process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	position += angle * speed * delta
 
 func enemy_hit(charge = 1):

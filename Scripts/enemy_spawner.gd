@@ -21,7 +21,7 @@ func _on_spawn_timer_timeout() -> void:
 
 func spawn_one_enemy():
 	# 前置检查：怪物数量未达上限 + 预制体/玩家已赋值
-	if enemy_pool.size() >= max_enemy_num or not enemy_scene or not player:
+	if not enemy_scene or not player:
 		return
 	# 1. 获取安全的随机生成位置（避开玩家+障碍物）
 	var spawn_pos = _get_safe_spawn_position()

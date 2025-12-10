@@ -56,7 +56,7 @@ monitorable = false
 shape = SubResource("CircleShape2D_6t5aa")
 
 [node name="ExpDetectionArea" type="Area2D" parent="."]
-collision_layer = 2
+collision_layer = 0
 collision_mask = 8
 monitorable = false
 
@@ -68,6 +68,7 @@ shape = SubResource("CircleShape2D_vgqql")
 [connection signal="area_entered" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_entered"]
 [connection signal="body_entered" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_body_entered"]
 [connection signal="body_exited" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_body_exited"]
+[connection signal="area_entered" from="ExpDetectionArea" to="." method="_on_exp_detection_area_area_entered"]
 [connection signal="body_entered" from="ExpDetectionArea" to="." method="_on_exp_detection_area_body_entered"]
 
 [editable path="HurtBox"]
