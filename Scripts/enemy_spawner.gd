@@ -1,10 +1,10 @@
 extends Node2D
 
 @export var enemy_scene: PackedScene
-@export var swapn_interval: float = 2.0
+@export var swapn_interval: float = 1.0
 @export var spawn_radius: int = 600
 @export var player: CharacterBody2D
-@export var max_enemy_num: int = 20
+@export var max_enemy_num: int = 10
 @onready var spwan_timer = $SpawnTimer
 var min_player_distance = 200
 var enemy_pool: Array[CharacterBody2D] = []

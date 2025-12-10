@@ -1,0 +1,61 @@
+[gd_scene load_steps=7 format=3 uid="uid://dube8adtiikqx"]
+
+[ext_resource type="Texture2D" uid="uid://coupxu3q2nxjv" path="res://Assets/Textures/Enemy/explosion_pixelfied.png" id="1_a801j"]
+[ext_resource type="AudioStream" uid="uid://b17ojowpx4uxa" path="res://Assets/Audio/SoundEffect/enemy_death.ogg" id="1_aayv4"]
+[ext_resource type="Script" uid="uid://ddaweibikobuq" path="res://Scripts/explosion.gd" id="2_4okmj"]
+
+[sub_resource type="Animation" id="Animation_a801j"]
+resource_name = "explosion"
+length = 0.32
+step = 0.02
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.02, 0.04, 0.06, 0.08, 0.099999994, 0.12, 0.14, 0.16, 0.17999999, 0.19999999, 0.22, 0.24, 0.26, 0.28, 0.29999998, 0.32),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 15, 15]
+}
+
+[sub_resource type="Animation" id="Animation_4okmj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4okmj"]
+_data = {
+&"RESET": SubResource("Animation_4okmj"),
+&"explosion": SubResource("Animation_a801j")
+}
+
+[node name="explosion" type="Sprite2D"]
+texture = ExtResource("1_a801j")
+hframes = 4
+vframes = 4
+frame = 1
+script = ExtResource("2_4okmj")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("1_aayv4")
+pitch_scale = 0.5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_4okmj")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://cqm4co2w6pn2i"]
+[gd_scene load_steps=9 format=3 uid="uid://cqm4co2w6pn2i"]
 
 [ext_resource type="Script" uid="uid://upttxo8nk0t" path="res://Scripts/enemy.gd" id="1_1f0kj"]
 [ext_resource type="Texture2D" uid="uid://bmh8exiawq0vo" path="res://Assets/Textures/Enemy/giant_amoeba_new.png" id="1_hghv2"]
 [ext_resource type="PackedScene" uid="uid://cg63kl7jg05tt" path="res://Scenes/hurt_box.tscn" id="2_287tu"]
 [ext_resource type="PackedScene" uid="uid://btw7cb8qxp120" path="res://Scenes/hit_box.tscn" id="2_afpow"]
+[ext_resource type="AudioStream" uid="uid://bpdx6sv478w1v" path="res://Assets/Audio/SoundEffect/enemy_hit.ogg" id="5_0830c"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_287tu"]
 radius = 16.03122
@@ -41,6 +42,11 @@ texture = ExtResource("1_hghv2")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 2)
 shape = SubResource("CircleShape2D_1f0kj")
+
+[node name="sound_hit" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(-2, 1)
+stream = ExtResource("5_0830c")
+volume_db = -5.0
 
 [connection signal="take_damage" from="HurtBox" to="." method="_on_hurt_box_take_damage"]
 

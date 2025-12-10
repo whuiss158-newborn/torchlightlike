@@ -60,3 +60,10 @@ func _on_enemy_detection_area_body_exited(body: Node2D) -> void:
 
 func _on_hurt_box_take_damage(damage: int) -> void:
 	print("player get damage", damage)
+
+
+func _on_exp_detection_area_body_entered(body: Node2D) -> void:
+	print(body)
+	if body.is_in_group("loot"):
+		if body.has_method("collect"):
+			body.call("collect")
