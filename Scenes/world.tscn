@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cqm4co2w6pn2i" path="res://Scenes/enemy.tscn" id="3_5a7ea"]
 [ext_resource type="PackedScene" uid="uid://dqo2xdftbtg1w" path="res://Scenes/enemy_spawner.tscn" id="3_8j60k"]
 
-[node name="World" type="Node2D"]
+[node name="World" type="WorldEnvironment"]
 
 [node name="Bg" type="Sprite2D" parent="."]
 texture_filter = 1

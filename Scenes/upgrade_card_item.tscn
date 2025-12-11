@@ -1,0 +1,52 @@
+[gd_scene load_steps=3 format=3 uid="uid://b32bhj1votyks"]
+
+[ext_resource type="Texture2D" uid="uid://d0jj7eete75d" path="res://Assets/Textures/Items/Weapons/sword.png" id="1_ean2d"]
+[ext_resource type="FontFile" uid="uid://ca028t44wb61" path="res://Assets/Font/tenderness.otf" id="2_totvp"]
+
+[node name="UpgradeCardItem" type="ColorRect"]
+custom_minimum_size = Vector2(140, 200)
+color = Color(0.7461245, 0.75190127, 0.4059957, 1)
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -30.0
+offset_top = 10.0
+offset_right = 30.0
+offset_bottom = 70.0
+grow_horizontal = 2
+color = Color(0.0724911, 0.03264108, 0.014459047, 1)
+
+[node name="TextureRect" type="TextureRect" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_ean2d")
+
+[node name="LabelName" type="Label" parent="."]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 0
+offset_left = 32.0
+offset_top = 80.0
+offset_right = 112.0
+offset_bottom = 125.0
+theme_override_fonts/font = ExtResource("2_totvp")
+theme_override_font_sizes/font_size = 20
+text = "攻击+5"
+horizontal_alignment = 1
+
+[node name="LabelDesc" type="Label" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 112.0
+offset_right = 128.0
+offset_bottom = 157.0
+theme_override_fonts/font = ExtResource("2_totvp")
+theme_override_font_sizes/font_size = 20
+text = "当前的武器攻击力增加"
+autowrap_mode = 2

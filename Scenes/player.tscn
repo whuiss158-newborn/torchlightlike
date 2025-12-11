@@ -1,8 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c0uyxaqko27a0"]
+[gd_scene load_steps=11 format=3 uid="uid://c0uyxaqko27a0"]
 
 [ext_resource type="Script" uid="uid://b6d25dht705vo" path="res://Scripts/player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://b5f6vnue6munh" path="res://Assets/Textures/Player/player_sprite.png" id="1_v0iea"]
 [ext_resource type="PackedScene" uid="uid://cg63kl7jg05tt" path="res://Scenes/hurt_box.tscn" id="2_6t5aa"]
+[ext_resource type="Texture2D" uid="uid://b08wl2crh651m" path="res://Assets/Textures/GUI/exp_background.png" id="4_fkybt"]
+[ext_resource type="Texture2D" uid="uid://b838kuxnjrsvu" path="res://Assets/Textures/GUI/exp_progress.png" id="5_x3wgy"]
+[ext_resource type="FontFile" uid="uid://ca028t44wb61" path="res://Assets/Font/tenderness.otf" id="6_x3wgy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6t5aa"]
 size = Vector2(25, 31)
@@ -39,7 +42,6 @@ position = Vector2(1, 2)
 shape = SubResource("CapsuleShape2D_cvnsp")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(0.6, 0.6)
 limit_smoothed = true
 position_smoothing_enabled = true
 
@@ -62,6 +64,82 @@ monitorable = false
 
 [node name="ExpDetectCollid" type="CollisionShape2D" parent="ExpDetectionArea"]
 shape = SubResource("CircleShape2D_vgqql")
+
+[node name="GUILayer" type="CanvasLayer" parent="."]
+
+[node name="GUI" type="Control" parent="GUILayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 640.0
+
+[node name="ExperienceBar" type="TextureProgressBar" parent="GUILayer/GUI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 20.0
+nine_patch_stretch = true
+stretch_margin_left = 2
+stretch_margin_top = 2
+stretch_margin_right = 2
+stretch_margin_bottom = 2
+texture_under = ExtResource("4_fkybt")
+texture_progress = ExtResource("5_x3wgy")
+
+[node name="lbl_level" type="Label" parent="GUILayer/GUI/ExperienceBar"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -10.0
+offset_bottom = 10.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_x3wgy")
+theme_override_font_sizes/font_size = 16
+text = "Level: 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelUpPanel" type="Panel" parent="GUILayer/GUI"]
+unique_name_in_owner = true
+process_mode = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -160.0
+offset_right = 400.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="lbl_levelUp" type="Label" parent="GUILayer/GUI/LevelUpPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -70.5
+offset_right = 70.5
+offset_bottom = 41.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("6_x3wgy")
+theme_override_font_sizes/font_size = 40
+text = "Level UP!"
+
+[node name="container_card" type="HBoxContainer" parent="GUILayer/GUI/LevelUpPanel"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 80.0
+offset_right = 700.0
+offset_bottom = 280.0
 
 [connection signal="take_damage" from="HurtBox" to="." method="_on_hurt_box_take_damage"]
 [connection signal="timeout" from="Attack/AttackCoolDownTimer" to="." method="_on_attack_cool_down_timer_timeout"]
