@@ -24,7 +24,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if not target == null:
 		global_position = global_position.move_toward(target.global_position, speed)
-		speed += 3 * delta
+		speed += 4 * delta
 		if global_position.distance_squared_to(target.global_position) < 10:
 			self.hide()
 			queue_free()

@@ -7,6 +7,8 @@ var attack_speed_growth = 1.3
 var player_level = 1
 var cur_exp = 0
 var upgrade_exp = 1
+# 新增全局变量：记录剩余需要处理的升级次数
+var remaining_level_ups: int = 0
 
 @onready var sprite = $Sprite2D
 @onready var attack_cool_down_timer: Timer = $Attack/AttackCoolDownTimer
@@ -86,26 +88,42 @@ func calculate_upgrade_expericence():
 	
 func handle_get_experience(exp: int):
 	cur_exp += exp
+	# 第一步：先计算本次总共能升多少级（仅算数值，不处理UI/属性）
+	var total_level_ups = 0
 	while cur_exp >= upgrade_exp:
-		player_level += 1
-		handle_level_up()
+		total_level_ups += 1
 		cur_exp -= upgrade_exp
 		upgrade_exp = calculate_upgrade_expericence()
 	update_experience_bar_status()
+	# 第二步：记录剩余升级次数，若有升级则启动第一步升级流程
+	if total_level_ups > 0:
+		remaining_level_ups = total_level_ups
+		# 处理第一次升级（生成3张牌，暂停游戏）
+		handle_level_up()
 
 func handle_level_up():
-	var card_container = level_up_panel.get_node("container_card")
-	level_up_panel.visible = true
-	var cardAmount = 3
-	var i = 1
-	while i <= cardAmount:
-		var card = upgradeCard.instantiate()
-		card_container.add_child(card)
-		i -= 1
+	# 1. 升级等级，更新属性（每升1级涨一次属性）
+	player_level += 1
+	print("当前等级：", player_level)
 	attack_speed = attack_speed * attack_speed_growth
 	attack_cool_down_timer.wait_time = 1 / attack_speed
-	print(attack_cool_down_timer.wait_time)
+	
+	# 2. 清空旧卡牌，生成新的3张牌
+	var card_container = level_up_panel.get_node("container_card")
+	# 先删除容器内所有旧卡牌，避免叠加
+	for child in card_container.get_children():
+		child.queue_free()
+	# 生成3张新牌（每级固定3张）
+	level_up_panel.visible = true
+	for i in range(3):
+		var card = upgradeCard.instantiate()
+		card_container.add_child(card)
+		print("生成第", i+1, "张升级卡牌")
+	
+	# 3. 暂停游戏，等待玩家选择
 	get_tree().paused = true
+	# 更新经验条（每升一级都更细）
+	update_experience_bar_status()
 	
 func update_experience_bar_status():
 	experience_bar.value = cur_exp 

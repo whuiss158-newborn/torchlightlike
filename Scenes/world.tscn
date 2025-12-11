@@ -24,3 +24,5 @@ motion_mode = 1
 enemy_scene = ExtResource("3_5a7ea")
 swapn_interval = 0.6
 player = NodePath("../player")
+
+[editable path="EnemySpawner"]
