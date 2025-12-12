@@ -1,29 +1,39 @@
 extends CharacterBody2D
 
 
-const SPEED = 40
-var attack_speed = 1
+var speed = 40
 var attack_speed_growth = 1.3
-var player_level = 1
-var cur_exp = 0
-var upgrade_exp = 1
-# 新增全局变量：记录剩余需要处理的升级次数
-var remaining_level_ups: int = 0
 
 @onready var sprite = $Sprite2D
 @onready var attack_cool_down_timer: Timer = $Attack/AttackCoolDownTimer
 @onready var experience_bar: TextureProgressBar = %ExperienceBar
 @onready var lbl_level: Label = %lbl_level
 @onready var level_up_panel: Panel = %LevelUpPanel
+@onready var card_container: Control = level_up_panel.get_node("container_card")
+@onready var exp_detection_area: Area2D = $ExpDetectionArea
 
 var iceSpear = preload("res://Scenes/ice_spear.tscn")
 var upgradeCard = preload("res://Scenes/upgrade_card_item.tscn")
 var enemy_close: Array[CharacterBody2D] = []
 
 func _ready() -> void:
-	attack_cool_down_timer.wait_time = 1 / attack_speed
+	# 初始化：从 GameManager 获取当前攻击速度
+	_update_attack_speed_from_level()
 	attack_cool_down_timer.one_shot = false
+	 # 关键步骤：将卡牌容器告知 GameManager
+	GameManager.set_card_container(card_container)
+	GameManager.player_xp_changed.connect(_on_player_xp_changed)
+	GameManager.player_level_up.connect(_on_player_level_up)
+
+	_update_experience_ui()
 	attack()
+
+func _update_attack_speed_from_level():
+	var base_speed = 1.0
+	var current_level = GameManager.current_level
+	var calculated_speed = base_speed * pow(attack_speed_growth, current_level - 1)
+	attack_cool_down_timer.wait_time = 1.0 / calculated_speed
+
 
 func movement():
 	var x_mov = Input.get_action_strength("right") - Input.get_action_strength("left")
@@ -33,7 +43,7 @@ func movement():
 		sprite.flip_h = true
 	elif mov.x < 0:
 		sprite.flip_h = false
-	velocity = mov.normalized() * SPEED
+	velocity = mov.normalized() * speed
 	move_and_slide()
 	
 func attack():
@@ -76,57 +86,69 @@ func _on_exp_detection_area_area_entered(area: Area2D) -> void:
 	if area.is_in_group("loot"):
 		if area.has_method("collect"):
 			var get_exp = area.call("collect", self)
-			handle_get_experience(get_exp)
+			GameManager.add_player_xp(get_exp)
 
-func calculate_upgrade_expericence():
-	if player_level < 5:
-		return player_level * 5
-	elif player_level < 10:
-		return player_level * 10
-	else	:
-		return 400 + player_level * 30
-	
-func handle_get_experience(exp: int):
-	cur_exp += exp
-	# 第一步：先计算本次总共能升多少级（仅算数值，不处理UI/属性）
-	var total_level_ups = 0
-	while cur_exp >= upgrade_exp:
-		total_level_ups += 1
-		cur_exp -= upgrade_exp
-		upgrade_exp = calculate_upgrade_expericence()
-	update_experience_bar_status()
-	# 第二步：记录剩余升级次数，若有升级则启动第一步升级流程
-	if total_level_ups > 0:
-		remaining_level_ups = total_level_ups
-		# 处理第一次升级（生成3张牌，暂停游戏）
-		handle_level_up()
+func _on_player_xp_changed(new_xp: int, xp_needed: int):
+	experience_bar.max_value = xp_needed
+	experience_bar.value = new_xp
 
-func handle_level_up():
-	# 1. 升级等级，更新属性（每升1级涨一次属性）
-	player_level += 1
-	print("当前等级：", player_level)
-	attack_speed = attack_speed * attack_speed_growth
-	attack_cool_down_timer.wait_time = 1 / attack_speed
-	
-	# 2. 清空旧卡牌，生成新的3张牌
-	var card_container = level_up_panel.get_node("container_card")
-	# 先删除容器内所有旧卡牌，避免叠加
+func _on_player_level_up(new_level: int):
+	print("玩家升级至等级：", new_level)
+	lbl_level.text = str("Level ", new_level)
+	_show_level_up_cards()
+	get_tree().paused = true
+
+func _show_level_up_cards():
 	for child in card_container.get_children():
 		child.queue_free()
-	# 生成3张新牌（每级固定3张）
+	
 	level_up_panel.visible = true
+	
 	for i in range(3):
-		var card = upgradeCard.instantiate()
-		card_container.add_child(card)
+		var card_instance = upgradeCard.instantiate()
+		var card_data = GameManager._generate_random_card_data()
+		var script_holder = card_instance.get_node("Container")
+		if script_holder and "card_data" in script_holder:
+			script_holder.card_data = card_data
+		if script_holder.has_signal("card_selected"):
+			script_holder.card_selected.connect(_on_upgrade_card_selected.bind(script_holder, card_data))
+		card_container.add_child(card_instance)
 		print("生成第", i+1, "张升级卡牌")
+
+func _on_upgrade_card_selected(card_node, card_data: CardData):
+	print("玩家选择了卡片：", card_data.card_name)
+	_apply_card_effect(card_data)
 	
-	# 3. 暂停游戏，等待玩家选择
-	get_tree().paused = true
-	# 更新经验条（每升一级都更细）
-	update_experience_bar_status()
+	level_up_panel.visible = false
+	for child in card_container.get_children():
+		child.queue_free()
 	
-func update_experience_bar_status():
-	experience_bar.value = cur_exp 
-	experience_bar.max_value = upgrade_exp
-	lbl_level.text = str("Level ", player_level)
+	get_tree().paused = false
+	_check_for_next_level_up()
+
+func _apply_card_effect(card_data: CardData):
+	match card_data.type:
+		CardData.CardType.ATTACK:
+			GameManager.player_attack_bonus += card_data.attack_power
+			print("攻击力增加: ", card_data.attack_power)
+		CardData.CardType.SPEED:
+			speed += card_data.move_speed_bonus * speed
+			print("移动速度增加")
+		CardData.CardType.EXPERIENCE:
+			exp_detection_area.scale += exp_detection_area.scale * card_data.pickup_range_bonus
+			print("经验拾取增加")
+		# ... 处理其他类型
+		
+func _check_for_next_level_up():
+	if GameManager.has_pending_level_up():
+		await get_tree().create_timer(0.5).timeout
+		GameManager.process_next_pending_level_up()
+
+func _update_experience_ui():
+	var info = GameManager.get_level_info()
+	print("info", info)
+	experience_bar.value = info.current_xp
+	experience_bar.max_value = info.xp_to_next_level
+	lbl_level.text = str("Level ", info.level)
+
 		
