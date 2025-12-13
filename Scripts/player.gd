@@ -1,8 +1,12 @@
 extends CharacterBody2D
 
 
+# ===================== 基础属性 =====================
 var speed = 40
 var attack_speed_growth = 1.3
+# 武器相关扩展属性（关联新武器系统）
+var weapon_damage_bonus = 0  # 武器伤害加成（由升级卡牌提供）
+var weapon_speed_bonus = 1.0 # 武器移动速度加成（默认1倍）
 
 @onready var sprite = $Sprite2D
 @onready var attack_cool_down_timer: Timer = $Attack/AttackCoolDownTimer
@@ -12,7 +16,9 @@ var attack_speed_growth = 1.3
 @onready var card_container: Control = level_up_panel.get_node("container_card")
 @onready var exp_detection_area: Area2D = $ExpDetectionArea
 
-var iceSpear = preload("res://Scenes/ice_spear.tscn")
+# 武器系统
+@export var weapon_prefab: PackedScene = null # 编辑器绑定新武器预制体
+@export var weapon_config: WeaponConfig = null # 编辑器绑定武器配置
 var upgradeCard = preload("res://Scenes/upgrade_card_item.tscn")
 var enemy_close: Array[CharacterBody2D] = []
 
@@ -27,6 +33,10 @@ func _ready() -> void:
 
 	_update_experience_ui()
 	attack()
+	
+	# 新武器系统：校验配置
+	if not weapon_prefab or not weapon_config:
+		push_warning("玩家未绑定武器预制体/配置！请在编辑器中设置")
 
 func _update_attack_speed_from_level():
 	var base_speed = 1.0
@@ -53,28 +63,40 @@ func attack():
 func _physics_process(delta: float) -> void:
 	movement()
 
-func _on_attack_cool_down_timer_timeout() -> void:
-	if enemy_close.size() > 0:
-		var iceSpearIns = iceSpear.instantiate()
-		iceSpearIns.target = get_random_target()
-		iceSpearIns.position = position
-		add_child(iceSpearIns)
+# ===================== 武器回调（扩展） =====================
+# 武器命中目标时的额外处理（比如吸血、暴击等）
+func _on_weapon_hit(weapon: Weapon, damage: int, knockback: float, target: Node2D) -> void:
+	print("玩家武器命中：", target.name, " 最终伤害：", damage)
+	# 示例：升级卡牌的暴击效果（可扩展）
+	# if randf() < 0.1: # 10%暴击率
+	# 	target.take_damage(damage * 2)
+# 武器销毁时的清理（可选）
+func _on_weapon_destroyed(weapon: Weapon) -> void:
+	pass # 可添加武器销毁特效、计数等逻辑
 
 func get_random_target():
-	if enemy_close.size() > 0:
-		return enemy_close.pick_random().global_position
-	else:
-		return Vector2.UP
+	# 过滤无效敌人
+	var valid_enemies = enemy_close.filter(is_instance_valid)
+	if valid_enemies.size() == 0:
+		return null
+	return valid_enemies.pick_random()
+	
+func get_closest_enemy() -> CharacterBody2D:
+	var valid_enemies = enemy_close.filter(is_instance_valid)
+	if valid_enemies.size() == 0:
+		return null
+	# 按距离排序，返回最近的
+	valid_enemies.sort_custom(func(a, b):
+		return global_position.distance_to(a.global_position) < global_position.distance_to(b.global_position))
+	return valid_enemies[0]
 	
 func _on_enemy_detection_area_body_entered(body: Node2D) -> void:
-	if enemy_close.has(body):
-		return
-	else:
+	if body is CharacterBody2D and body.is_in_group("enemy") and not enemy_close.has(body):
 		enemy_close.append(body)
 
 
 func _on_enemy_detection_area_body_exited(body: Node2D) -> void:
-	if enemy_close.has(body):
+	if body is CharacterBody2D and enemy_close.has(body):
 		enemy_close.erase(body)
 
 
@@ -83,10 +105,9 @@ func _on_hurt_box_take_damage(damage: int) -> void:
 
 
 func _on_exp_detection_area_area_entered(area: Area2D) -> void:
-	if area.is_in_group("loot"):
-		if area.has_method("collect"):
-			var get_exp = area.call("collect", self)
-			GameManager.add_player_xp(get_exp)
+	if area.is_in_group("loot") and area.has_method("collect"):
+		var get_exp = area.call("collect", self)
+		GameManager.add_player_xp(get_exp)
 
 func _on_player_xp_changed(new_xp: int, xp_needed: int):
 	experience_bar.max_value = xp_needed
@@ -114,6 +135,7 @@ func _show_level_up_cards():
 			script_holder.card_selected.connect(_on_upgrade_card_selected.bind(script_holder, card_data))
 		card_container.add_child(card_instance)
 		print("生成第", i+1, "张升级卡牌")
+	GameManager._reset_used_card_types()
 
 func _on_upgrade_card_selected(card_node, card_data: CardData):
 	print("玩家选择了卡片：", card_data.card_name)
@@ -129,15 +151,22 @@ func _on_upgrade_card_selected(card_node, card_data: CardData):
 func _apply_card_effect(card_data: CardData):
 	match card_data.type:
 		CardData.CardType.ATTACK:
-			GameManager.player_attack_bonus += card_data.attack_power
-			print("攻击力增加: ", card_data.attack_power)
+			# 原逻辑：GameManager攻击加成 → 改为武器伤害加成
+			weapon_damage_bonus += card_data.attack_power
+			# GameManager.player_attack_bonus += card_data.attack_power # 可保留，兼容其他逻辑
+			print("武器攻击力增加: ", card_data.attack_power, " 总加成：", weapon_damage_bonus)
 		CardData.CardType.SPEED:
+			# 原逻辑：移动速度加成 + 新增武器速度加成
 			speed += card_data.move_speed_bonus * speed
-			print("移动速度增加")
+			weapon_speed_bonus += card_data.move_speed_bonus * 0.2 # 武器速度加成（20%的移动加成比例）
+			print("移动速度增加，武器速度加成：", weapon_speed_bonus)
 		CardData.CardType.EXPERIENCE:
 			exp_detection_area.scale += exp_detection_area.scale * card_data.pickup_range_bonus
-			print("经验拾取增加")
-		# ... 处理其他类型
+			print("经验拾取范围增加")
+		# 扩展：新增武器专属卡牌类型（比如暴击、范围伤害）
+		# CardData.CardType.WEAPON_RANGE:
+		# 	weapon_config.attack_size *= 1.2 # 武器攻击范围扩大
+		# 	print("武器攻击范围增加")
 		
 func _check_for_next_level_up():
 	if GameManager.has_pending_level_up():
@@ -152,3 +181,34 @@ func _update_experience_ui():
 	lbl_level.text = str("Level ", info.level)
 
 		
+
+
+func _on_attack_cool_down_timer_timeout() -> void:
+	if enemy_close.size() == 0 or not weapon_prefab or not weapon_config:
+		return
+	
+	# 1. 获取随机敌人目标
+	var target_enemy = get_closest_enemy()
+	if not is_instance_valid(target_enemy):
+		return
+	
+	# 2. 实例化新武器（替代旧iceSpear）
+	var weapon_instance = weapon_prefab.instantiate() as Weapon
+	if not weapon_instance:
+		push_error("武器实例化失败！请检查预制体是否挂载Weapon.gd")
+		return
+	
+	# 3. 配置武器核心参数（结合玩家升级加成）
+	weapon_instance.config = weapon_config # 绑定配置
+	weapon_instance.target = target_enemy.global_position # 攻击目标
+	weapon_instance.global_position = global_position # 生成位置（玩家位置）
+	# 应用升级加成：伤害/速度
+	weapon_instance.config.damage += weapon_damage_bonus
+	weapon_instance.config.speed *= weapon_speed_bonus
+	
+	# 4. 挂载武器到场景（而非玩家子节点，避免跟随移动）
+	get_tree().current_scene.add_child(weapon_instance)
+	
+	# 5. 监听武器命中信号（可选：玩家层面处理额外效果）
+	weapon_instance.hit.connect(_on_weapon_hit)
+	weapon_instance.destroyed.connect(_on_weapon_destroyed)

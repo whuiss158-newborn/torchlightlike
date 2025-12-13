@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://beyfhooj2dxsa"]
+
+[ext_resource type="Script" uid="uid://dg4ca3etjaqav" path="res://Scripts/Weapon/WeaponBase.gd" id="1_07f0d"]
+[ext_resource type="Resource" uid="uid://dltshjdqt2ttp" path="res://Sources/res/weapons/Bullet_Lv1.tres" id="2_spcs0"]
+[ext_resource type="Texture2D" uid="uid://dao17to8r7ym7" path="res://icon.svg" id="2_sxckf"]
+[ext_resource type="Script" uid="uid://bdlolgkfkyh07" path="res://Scripts/Utils/HitBox/WeaponHitBox.gd" id="4_q6nin"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_07f0d"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fyj48"]
+radius = 14.142136
+
+[node name="TestBullet" type="Area2D" groups=["attack"]]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_07f0d")
+config = ExtResource("2_spcs0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_07f0d")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1.1920929e-07, -1.4901161e-08)
+scale = Vector2(0.15820314, 0.15820314)
+texture = ExtResource("2_sxckf")
+
+[node name="WeaponHitBox" type="Area2D" parent="." node_paths=PackedStringArray("host") groups=["hit_box"]]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("4_q6nin")
+host = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponHitBox"]
+shape = SubResource("CircleShape2D_fyj48")

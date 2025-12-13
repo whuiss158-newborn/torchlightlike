@@ -1,0 +1,56 @@
+[gd_scene load_steps=9 format=3 uid="uid://cqm4co2w6pn2i"]
+
+[ext_resource type="Script" uid="uid://upttxo8nk0t" path="res://Scripts/enemy.gd" id="1_d40jh"]
+[ext_resource type="PackedScene" uid="uid://btw7cb8qxp120" path="res://Scenes/hit_box.tscn" id="3_pqgp3"]
+[ext_resource type="Texture2D" uid="uid://bmh8exiawq0vo" path="res://Assets/Textures/Enemy/giant_amoeba_new.png" id="4_4ad2a"]
+[ext_resource type="Script" uid="uid://d1ert0mu20i6b" path="res://Scripts/Utils/HurtBox/BaseHurtBox.gd" id="5_d40jh"]
+[ext_resource type="AudioStream" uid="uid://bpdx6sv478w1v" path="res://Assets/Audio/SoundEffect/enemy_hit.ogg" id="5_kiqm3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_287tu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1f0kj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_d40jh"]
+radius = 15.0
+
+[node name="enemy" type="CharacterBody2D" groups=["enemy"]]
+collision_layer = 4
+collision_mask = 2
+motion_mode = 1
+script = ExtResource("1_d40jh")
+
+[node name="HitBox" parent="." instance=ExtResource("3_pqgp3")]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" parent="HitBox" index="0"]
+position = Vector2(-1, 1)
+shape = SubResource("RectangleShape2D_287tu")
+debug_color = Color(0.89720875, 0.24350217, 0.518455, 0.41960785)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("4_4ad2a")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 2)
+shape = SubResource("CircleShape2D_1f0kj")
+
+[node name="sound_hit" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(-2, 1)
+stream = ExtResource("5_kiqm3")
+volume_db = -5.0
+
+[node name="EnemyHurtBox" type="Area2D" parent="." node_paths=PackedStringArray("host") groups=["hurt_box_enemy"]]
+position = Vector2(9, 47)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("5_d40jh")
+hurt_box_type = 1
+host = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyHurtBox"]
+position = Vector2(-9, -45)
+shape = SubResource("CircleShape2D_d40jh")
+debug_color = Color(0.35016045, 0.61620694, 0.1935752, 0.41960785)
+
+[editable path="HitBox"]

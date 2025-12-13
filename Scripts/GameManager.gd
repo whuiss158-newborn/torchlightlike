@@ -34,42 +34,14 @@ var available_card_types_on_level_up: Array = [
 ]
 
 var card_rarity_weights: Array[int] = [50, 30, 15, 4, 1]
+# ====== 新增：已使用卡牌Type缓存（核心去重变量） ======
+var _used_card_types: Array = []
 
 # ====== 节点引用 ======
 @onready var card_container: Control = null
 
 func _ready():
 	pass
-
-# 在GameManager.gd中添加以下调试函数
-func check_card_system_status():
-	print("\n=== 卡牌系统状态检查 ===")
-	
-	# 检查CardData类
-	if ClassDB.class_exists("CardData"):
-		print("✅ CardData类: 已注册")
-		
-		# 检查静态方法
-		var script = load("res://CardData.gd")
-		if script and script.has_method("create_random_card_by_type"):
-			print("✅ create_random_card_by_type方法: 存在")
-		else:
-			print("❌ create_random_card_by_type方法: 不存在")
-	else:
-		print("❌ CardData类: 未注册")
-		print("   请确保CardData.gd包含 'class_name CardData'")
-	
-	# 检查卡片场景
-	var card_scene_path = "res://Scenes/upgrade_card_item.tscn"
-	if ResourceLoader.exists(card_scene_path):
-		print("✅ 卡片场景文件: 存在")
-	else:
-		print("❌ 卡片场景文件: 不存在 - ", card_scene_path)
-	
-	# 检查类型数组
-	print("✅ 可用卡片类型: ", available_card_types_on_level_up.size(), " 种")
-	print("✅ 稀有度权重: ", card_rarity_weights)
-	print("=========================\n")
 
 # ====== 核心API ======
 func add_player_xp(xp_amount: int):
@@ -102,9 +74,29 @@ func has_pending_level_up() -> bool:
 
 # ====== 新增：生成随机卡片数据的函数（供Player调用） ======
 func _generate_random_card_data() -> CardData:
-	var random_type = available_card_types_on_level_up.pick_random()
+	# 1. 筛选出未使用的Type（可用Type - 已用Type）
+	var unused_types = []
+	for type in available_card_types_on_level_up:
+		if type not in _used_card_types:
+			unused_types.append(type)
+	
+	# 2. 边界处理：如果所有Type都已使用，重置缓存（循环复用）
+	if unused_types.is_empty():
+		_used_card_types.clear()
+		unused_types = available_card_types_on_level_up.duplicate()
+	
+	# 3. 从未使用的Type中随机选一个
+	var random_type = unused_types.pick_random()
+	# 4. 将选中的Type加入已用缓存，避免重复
+	_used_card_types.append(random_type)
+	print(unused_types)
+	
+	# 5. 生成对应Type的随机稀有度卡牌（原有逻辑不变）
 	var random_rarity = _get_weighted_random_rarity(card_rarity_weights)
 	return CardData.create_random_card_by_type(random_type, random_rarity)
+	
+func _reset_used_card_types():
+	_used_card_types.clear()
 
 func set_card_container(container_node: Control):
 	if container_node is Control:
