@@ -21,8 +21,8 @@ var is_selectable: bool = true # 是否允许被选中（可根据游戏逻辑�
 @onready var name_label: Label = $NameLabel
 @onready var desc_label: Label = $DescLabel
 @onready var icon_texture: TextureRect = $ColorRect/IconTexture
-@onready var rarity_border: ColorRect = $RarityBorder # 一个用于显示稀有度颜色的色块
-@onready var type_icon: Sprite2D = $TypeIcon # 用于显示类型的小图标
+#@onready var rarity_border: ColorRect = $RarityBorder # 一个用于显示稀有度颜色的色块
+#@onready var type_icon: Sprite2D = $TypeIcon # 用于显示类型的小图标
 
 signal card_selected
 

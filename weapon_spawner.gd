@@ -2,11 +2,17 @@ extends Node2D
 
 # 子弹预制体（编辑器绑定）
 @export var bullet_prefab: PackedScene = null
+@export var enemy_prefab: PackedScene = null
 # 生成位置（屏幕左侧）
 var spawn_pos: Vector2 = Vector2(100, 300)
-const TEST_ENEMY = preload("uid://cqu87ckt1a83i")
+var e_spawn_pos: Vector2 = Vector2(500, 800)
+var enemy = null
+@onready var test_enemy: CharacterBody2D = $TestEnemy
 
 func _ready() -> void:
+	enemy = enemy_prefab.instantiate()
+	enemy.global_position = e_spawn_pos
+	get_tree().current_scene.add_child(enemy)
 	# 延迟1秒生成子弹（方便观察）
 	await get_tree().create_timer(1.0).timeout
 	_spawn_test_bullet()
@@ -18,7 +24,7 @@ func _spawn_test_bullet() -> void:
 	# 设置生成位置
 	bullet.global_position = spawn_pos
 	# 设置目标位置（敌人位置）
-	bullet.target = get_node("TestEnemy").global_position
+	bullet.target = test_enemy.global_position
 	# 添加到场景
 	get_tree().current_scene.add_child(bullet)
 	

@@ -18,6 +18,8 @@ func _is_host_alive() -> bool:
 	return host is Weapon and host.is_alive
 
 func _get_final_damage() -> int:
+	if host.config.damage:
+		print('config.damage', host.config.damage)
 	return host.config.damage if (host is Weapon) else attack_damage
 
 func _get_final_knockback() -> float:

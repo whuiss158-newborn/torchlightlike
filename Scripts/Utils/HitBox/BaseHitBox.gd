@@ -11,7 +11,7 @@ func _ready() -> void:
 	area_entered.connect(_on_area_entered)
 	add_to_group("hit_box")
 	monitoring = true
-	monitorable = false
+	monitorable = true
 	
 	# 可选：校验host是否绑定（避免空值）
 	if not is_instance_valid(host):
@@ -19,7 +19,6 @@ func _ready() -> void:
 
 # 通用碰撞检测
 func _on_area_entered(area: Area2D) -> void:
-	print("_is_host_alive", get_overlapping_areas())
 	if not _is_host_alive() or not area.is_in_group(target_hurtbox_group) or not is_instance_valid(area):
 		return
 	_trigger_attack(area)
@@ -28,6 +27,7 @@ func _on_area_entered(area: Area2D) -> void:
 func _trigger_attack(hurt_box: Area2D) -> void:
 	var final_damage = _get_final_damage()
 	var final_knockback = _get_final_knockback()
+	print("trigger attack", final_damage, final_knockback)
 	var hit_pos = global_position
 	
 	if hurt_box.has_signal("take_damage"):

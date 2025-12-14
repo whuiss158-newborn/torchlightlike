@@ -11,7 +11,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_1f0kj"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_d40jh"]
-radius = 15.0
+radius = 19.416489
 
 [node name="enemy" type="CharacterBody2D" groups=["enemy"]]
 collision_layer = 4
@@ -41,16 +41,19 @@ stream = ExtResource("5_kiqm3")
 volume_db = -5.0
 
 [node name="EnemyHurtBox" type="Area2D" parent="." node_paths=PackedStringArray("host") groups=["hurt_box_enemy"]]
+visible = false
 position = Vector2(9, 47)
 collision_layer = 4
-collision_mask = 0
+collision_mask = 2
 script = ExtResource("5_d40jh")
 hurt_box_type = 1
 host = NodePath("..")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyHurtBox"]
-position = Vector2(-9, -45)
+position = Vector2(-10, -46)
 shape = SubResource("CircleShape2D_d40jh")
 debug_color = Color(0.35016045, 0.61620694, 0.1935752, 0.41960785)
+
+[node name="DisableTimer" type="Timer" parent="EnemyHurtBox"]
 
 [editable path="HitBox"]

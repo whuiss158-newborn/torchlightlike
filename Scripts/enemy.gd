@@ -39,7 +39,7 @@ func spawn_exp():
 	exp.global_position = global_position
 	get_parent().call_deferred("add_child", exp)
 
-func _on_hurt_box_take_damage(damage: int, hitPosition: Vector2, knockback_amount) -> void:
+func _on_hurtbox_take_damage(damage: int, hitPosition: Vector2, knockback_amount) -> void:
 	hp -= damage
 	knockback = (global_position - hitPosition).normalized() * knockback_amount
 	if hp <= 0:

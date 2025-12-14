@@ -5,19 +5,24 @@
 [ext_resource type="Texture2D" uid="uid://dao17to8r7ym7" path="res://icon.svg" id="2_sxckf"]
 [ext_resource type="Script" uid="uid://bdlolgkfkyh07" path="res://Scripts/Utils/HitBox/WeaponHitBox.gd" id="4_q6nin"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_07f0d"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q6nin"]
+size = Vector2(28, 26)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_fyj48"]
-radius = 14.142136
+[sub_resource type="CircleShape2D" id="CircleShape2D_q6nin"]
+radius = 34.20526
 
 [node name="TestBullet" type="Area2D" groups=["attack"]]
-collision_layer = 0
+collision_layer = 2
 collision_mask = 0
+monitoring = false
+monitorable = false
 script = ExtResource("1_07f0d")
 config = ExtResource("2_spcs0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_07f0d")
+shape = SubResource("RectangleShape2D_q6nin")
+disabled = true
+debug_color = Color(0.9234807, 0.19196323, 0.5046088, 0.41960785)
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 
@@ -33,4 +38,4 @@ script = ExtResource("4_q6nin")
 host = NodePath("..")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponHitBox"]
-shape = SubResource("CircleShape2D_fyj48")
+shape = SubResource("CircleShape2D_q6nin")
