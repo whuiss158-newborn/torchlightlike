@@ -94,7 +94,7 @@ func _physics_process(delta):
 	# 处理击退
 	if knockback.length() > 0:
 		velocity = knockback
-		knockback = knockback.move_toward(Vector2.ZERO, enemy_data.knockback_recovery * delta)
+		knockback = knockback.move_toward(Vector2.ZERO, enemy_data.knockback_recovery)
 		play_animation("hurt")
 	else:
 		# 实现移动逻辑

@@ -1,7 +1,14 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3 uid="uid://bm6sorwra5qck"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=3 format=3 uid="uid://bm6sorwra5qck"]
 
 [ext_resource type="Script" uid="uid://b2mm8cstlr7jd" path="res://Scripts/Enemy/EnemyData.gd" id="1_sss1o"]
+[ext_resource type="Texture2D" uid="uid://ca750ko1sasnt" path="res://Assets/Textures/Enemy/cyclops.png" id="2_4s40v"]
 
 [resource]
 script = ExtResource("1_sss1o")
+display_name = "Giant"
+description = "A gaint enemy"
+max_health = 30
+move_speed = 40.0
+attack_damage = 5
+sprite_texture = ExtResource("2_4s40v")
 metadata/_custom_type_script = "uid://b2mm8cstlr7jd"

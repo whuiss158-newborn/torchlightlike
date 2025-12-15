@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://b316k18a6sf8c" path="res://Assets/Textures/dirt_full_new.png" id="1_a02cp"]
 [ext_resource type="PackedScene" uid="uid://c0uyxaqko27a0" path="res://Scenes/player.tscn" id="2_go701"]
 [ext_resource type="PackedScene" uid="uid://dqo2xdftbtg1w" path="res://Scenes/Enemy/enemy_spawner.tscn" id="3_8j60k"]
-[ext_resource type="PackedScene" uid="uid://bau6v2n4ffs0y" path="res://Scenes/Enemy/test/melee_enemy_test.tscn" id="4_8j60k"]
+[ext_resource type="PackedScene" uid="uid://bau6v2n4ffs0y" path="res://Scenes/Enemy/test/melee_enemy.tscn" id="4_8j60k"]
 
 [node name="World" type="WorldEnvironment"]
 
