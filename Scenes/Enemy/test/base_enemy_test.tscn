@@ -1,0 +1,57 @@
+[gd_scene load_steps=9 format=3 uid="uid://bcn1uuar1m7dk"]
+
+[ext_resource type="Script" uid="uid://d554jnfl65u5" path="res://Scripts/Enemy/BaseEnemy.gd" id="1_qt23m"]
+[ext_resource type="Resource" uid="uid://fp7xtik8b03d" path="res://Sources/res/enemys/slime.tres" id="2_eabqa"]
+[ext_resource type="PackedScene" uid="uid://btw7cb8qxp120" path="res://Scenes/hit_box.tscn" id="2_hitbox"]
+[ext_resource type="Script" uid="uid://d1ert0mu20i6b" path="res://Scripts/Utils/HurtBox/BaseHurtBox.gd" id="3_hurtbox"]
+[ext_resource type="Texture2D" uid="uid://dyi2j6bx0ll3h" path="res://Assets/Textures/Enemy/juggernaut.png" id="3_sqbgd"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2"]
+radius = 30.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sqbgd"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sqbgd"]
+radius = 16.0
+height = 32.0
+
+[node name="BaseEnemy" type="CharacterBody2D" groups=["enemy"]]
+position = Vector2(144, 104)
+collision_layer = 4
+collision_mask = 2
+motion_mode = 1
+script = ExtResource("1_qt23m")
+enemy_data = ExtResource("2_eabqa")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_sqbgd")
+hframes = 2
+
+[node name="HitBox" parent="." instance=ExtResource("2_hitbox")]
+collision_layer = 4
+collision_mask = 2
+
+[node name="EnemyHurtBox" type="Area2D" parent="." node_paths=PackedStringArray("host") groups=["hurt_box_enemy"]]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("3_hurtbox")
+hurt_box_type = 1
+host = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyHurtBox"]
+shape = SubResource("CircleShape2D_2")
+
+[node name="DisableTimer" type="Timer" parent="EnemyHurtBox"]
+
+[node name="sound_hit" type="AudioStreamPlayer2D" parent="."]
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_sqbgd")
+
+[node name="SelfCollisionShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_sqbgd")
+
+[connection signal="take_damage" from="EnemyHurtBox" to="." method="take_damage"]
+[connection signal="timeout" from="AttackCooldownTimer" to="." method="_on_attack_cooldown_timer_timeout"]

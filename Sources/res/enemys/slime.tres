@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=4 format=3 uid="uid://fp7xtik8b03d"]
+
+[ext_resource type="Texture2D" uid="uid://bmh8exiawq0vo" path="res://Assets/Textures/Enemy/giant_amoeba_new.png" id="1_b3r7o"]
+[ext_resource type="AudioStream" uid="uid://bpdx6sv478w1v" path="res://Assets/Audio/SoundEffect/enemy_hit.ogg" id="2_ioqt0"]
+[ext_resource type="Script" uid="uid://b2mm8cstlr7jd" path="res://Scripts/Enemy/EnemyData.gd" id="3_qhv5f"]
+
+[resource]
+script = ExtResource("3_qhv5f")
+display_name = "Slime"
+description = "A Slime enemy"
+sprite_texture = ExtResource("1_b3r7o")
+hit_sound = ExtResource("2_ioqt0")
+metadata/_custom_type_script = "uid://b2mm8cstlr7jd"

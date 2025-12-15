@@ -180,9 +180,6 @@ func _update_experience_ui():
 	experience_bar.max_value = info.xp_to_next_level
 	lbl_level.text = str("Level ", info.level)
 
-		
-
-
 func _on_attack_cool_down_timer_timeout() -> void:
 	if enemy_close.size() == 0 or not weapon_prefab or not weapon_config:
 		return
@@ -199,12 +196,15 @@ func _on_attack_cool_down_timer_timeout() -> void:
 		return
 	
 	# 3. 配置武器核心参数（结合玩家升级加成）
-	weapon_instance.config = weapon_config # 绑定配置
+	# 克隆TestBullet的原始配置（关键：避免修改原资源）
+	var weapon_config_copy = weapon_instance.config.duplicate() as WeaponConfig
+	# 应用升级加成：伤害/速度
+	weapon_config_copy.damage += weapon_damage_bonus
+	weapon_config_copy.speed *= weapon_speed_bonus
+	# 将副本赋值给武器实例（覆盖原config）
+	weapon_instance.config = weapon_config_copy
 	weapon_instance.target = target_enemy.global_position # 攻击目标
 	weapon_instance.global_position = global_position # 生成位置（玩家位置）
-	# 应用升级加成：伤害/速度
-	weapon_instance.config.damage += weapon_damage_bonus
-	weapon_instance.config.speed *= weapon_speed_bonus
 	
 	# 4. 挂载武器到场景（而非玩家子节点，避免跟随移动）
 	get_tree().current_scene.add_child(weapon_instance)

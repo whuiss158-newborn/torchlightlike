@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://diayu3gb7kj0"]
+
+[ext_resource type="PackedScene" uid="uid://bau6v2n4ffs0y" path="res://Scenes/Enemy/test/melee_enemy_test.tscn" id="1_am1gv"]
+[ext_resource type="Resource" uid="uid://fp7xtik8b03d" path="res://Sources/res/enemys/slime.tres" id="2_mili8"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6dj4t"]
+
+[node name="Slime2" instance=ExtResource("1_am1gv")]
+enemy_data = ExtResource("2_mili8")
+
+[node name="AnimatedSprite2D" parent="." index="5"]
+sprite_frames = SubResource("SpriteFrames_6dj4t")
+
+[connection signal="take_damage" from="EnemyHurtBox" to="." method="take_damage"]
