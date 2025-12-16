@@ -2,12 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cwc1iftqaljcu" path="res://weapon_spawner.gd" id="1_xpu76"]
 [ext_resource type="PackedScene" uid="uid://cevbgmq4j7asc" path="res://Scenes/Weapons/IceSpear.tscn" id="2_7gkfr"]
-[ext_resource type="PackedScene" uid="uid://b0r2j6s5otfv0" path="res://Scenes/Enemy/test_enemy.tscn" id="3_7gkfr"]
+[ext_resource type="PackedScene" uid="uid://cutmrh728f2ga" path="res://Scenes/Enemy/Giant.tscn" id="3_5eosb"]
 
 [node name="WeaponSpawner" type="Node2D"]
 script = ExtResource("1_xpu76")
 bullet_prefab = ExtResource("2_7gkfr")
-enemy_prefab = ExtResource("3_7gkfr")
-
-[node name="TestEnemy" parent="." instance=ExtResource("3_7gkfr")]
-position = Vector2(526, 76)
+enemy_prefab = ExtResource("3_5eosb")

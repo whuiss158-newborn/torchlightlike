@@ -5,9 +5,8 @@ extends Node2D
 @export var enemy_prefab: PackedScene = null
 # 生成位置（屏幕左侧）
 var spawn_pos: Vector2 = Vector2(100, 300)
-var e_spawn_pos: Vector2 = Vector2(500, 800)
+var e_spawn_pos: Vector2 = Vector2(300, 400)
 var enemy = null
-@onready var test_enemy: CharacterBody2D = $TestEnemy
 
 func _ready() -> void:
 	enemy = enemy_prefab.instantiate()
@@ -24,7 +23,7 @@ func _spawn_test_bullet() -> void:
 	# 设置生成位置
 	bullet.global_position = spawn_pos
 	# 设置目标位置（敌人位置）
-	bullet.target = test_enemy.global_position
+	bullet.target = enemy.global_position
 	# 添加到场景
 	get_tree().current_scene.add_child(bullet)
 	

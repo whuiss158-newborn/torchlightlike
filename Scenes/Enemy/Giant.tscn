@@ -1,12 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://cutmrh728f2ga"]
+[gd_scene load_steps=3 format=3 uid="uid://cutmrh728f2ga"]
 
 [ext_resource type="PackedScene" uid="uid://bau6v2n4ffs0y" path="res://Scenes/Enemy/test/melee_enemy.tscn" id="1_nbtjd"]
-[ext_resource type="Resource" uid="uid://bm6sorwra5qck" path="res://Sources/res/enemys/giant.tres" id="2_nsgqy"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nsgqy"]
 
 [node name="Giant" instance=ExtResource("1_nbtjd")]
-enemy_data = ExtResource("2_nsgqy")
 
 [node name="CollisionShape2D" parent="EnemyHurtBox" index="0"]
 debug_color = Color(0.94107693, 0.11884638, 0.5325934, 0.41960785)

@@ -26,7 +26,8 @@ var current_state: String = "idle"
 func _ready():
 	if enemy_data:
 		initialize_enemy()
-	player = get_tree().get_first_node_in_group("player")
+	var t = get_tree().get_first_node_in_group("player")
+	player = t
 	
 func initialize_enemy():
 	current_health = enemy_data.max_health
@@ -99,7 +100,7 @@ func _physics_process(delta):
 	else:
 		# 实现移动逻辑
 		move_ai(delta)
-	
+	print(velocity)
 	move_and_slide()
 
 # 移动AI（可被子类重写）

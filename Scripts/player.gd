@@ -18,7 +18,7 @@ var weapon_speed_bonus = 1.0 # 武器移动速度加成（默认1倍）
 
 # 武器系统
 @export var weapon_prefab: PackedScene = null # 编辑器绑定新武器预制体
-@export var weapon_config: WeaponConfig = null # 编辑器绑定武器配置
+#@export var weapon_config: WeaponConfig = null # 编辑器绑定武器配置
 var upgradeCard = preload("res://Scenes/upgrade_card_item.tscn")
 var enemy_close: Array[CharacterBody2D] = []
 
@@ -35,8 +35,8 @@ func _ready() -> void:
 	attack()
 	
 	# 新武器系统：校验配置
-	if not weapon_prefab or not weapon_config:
-		push_warning("玩家未绑定武器预制体/配置！请在编辑器中设置")
+	if not weapon_prefab:
+		push_warning("玩家未绑定武器预制体！请在编辑器中设置")
 
 func _update_attack_speed_from_level():
 	var base_speed = 1.0
@@ -181,7 +181,7 @@ func _update_experience_ui():
 	lbl_level.text = str("Level ", info.level)
 
 func _on_attack_cool_down_timer_timeout() -> void:
-	if enemy_close.size() == 0 or not weapon_prefab or not weapon_config:
+	if enemy_close.size() == 0 or not weapon_prefab:
 		return
 	
 	# 1. 获取随机敌人目标
