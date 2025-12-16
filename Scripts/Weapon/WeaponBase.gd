@@ -20,7 +20,7 @@ var behaviors: Dictionary = {
 	"target": null      # 目标检测行为（ITargetBehavior，可选）
 }
 
-# ===================== 核心信号（解耦外部逻辑） =====================
+# ===================== 核心信号（解耦外部逻辑） ====================="res://Sources/res/weapons/IceSpear.tres"
 ## 武器命中目标时触发
 ## @param weapon: 当前武器实例
 ## @param damage: 伤害值

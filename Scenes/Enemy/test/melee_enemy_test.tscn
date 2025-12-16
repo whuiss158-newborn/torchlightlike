@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://cfmovcke13iyk"]
+
+[ext_resource type="Script" uid="uid://pkkvgi2xgmm3" path="res://Scripts/Enemy/MeleeEnemy.gd" id="1_3q1ll"]
+[ext_resource type="Texture2D" uid="uid://ca750ko1sasnt" path="res://Assets/Textures/Enemy/cyclops.png" id="2_3q1ll"]
+[ext_resource type="PackedScene" uid="uid://btw7cb8qxp120" path="res://Scenes/hit_box.tscn" id="2_hitbox"]
+[ext_resource type="Script" uid="uid://d1ert0mu20i6b" path="res://Scripts/Utils/HurtBox/BaseHurtBox.gd" id="3_hurtbox"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2"]
+radius = 30.0
+
+[node name="MeleeEnemy" type="CharacterBody2D" groups=["enemy"]]
+collision_layer = 4
+collision_mask = 2
+motion_mode = 1
+script = ExtResource("1_3q1ll")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_3q1ll")
+hframes = 2
+
+[node name="HitBox" parent="." instance=ExtResource("2_hitbox")]
+collision_layer = 4
+collision_mask = 2
+
+[node name="EnemyHurtBox" type="Area2D" parent="." node_paths=PackedStringArray("host") groups=["hurt_box_enemy"]]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("3_hurtbox")
+hurt_box_type = 1
+host = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyHurtBox"]
+shape = SubResource("CircleShape2D_2")
+
+[node name="DisableTimer" type="Timer" parent="EnemyHurtBox"]
+
+[node name="sound_hit" type="AudioStreamPlayer2D" parent="."]
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+
+[connection signal="take_damage" from="EnemyHurtBox" to="." method="take_damage"]
+[connection signal="timeout" from="AttackCooldownTimer" to="." method="_on_attack_cooldown_timer_timeout"]

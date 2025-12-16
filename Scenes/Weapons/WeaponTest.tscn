@@ -1,12 +1,12 @@
 [gd_scene load_steps=4 format=3 uid="uid://b8uunr3kvcncb"]
 
 [ext_resource type="Script" uid="uid://cwc1iftqaljcu" path="res://weapon_spawner.gd" id="1_xpu76"]
-[ext_resource type="PackedScene" uid="uid://beyfhooj2dxsa" path="res://Scenes/Weapons/test_bullet.tscn" id="2_qayxj"]
-[ext_resource type="PackedScene" uid="uid://cqu87ckt1a83i" path="res://Scenes/Enemy/test_enemy.tscn" id="3_7gkfr"]
+[ext_resource type="PackedScene" uid="uid://cevbgmq4j7asc" path="res://Scenes/Weapons/IceSpear.tscn" id="2_7gkfr"]
+[ext_resource type="PackedScene" uid="uid://b0r2j6s5otfv0" path="res://Scenes/Enemy/test_enemy.tscn" id="3_7gkfr"]
 
 [node name="WeaponSpawner" type="Node2D"]
 script = ExtResource("1_xpu76")
-bullet_prefab = ExtResource("2_qayxj")
+bullet_prefab = ExtResource("2_7gkfr")
 enemy_prefab = ExtResource("3_7gkfr")
 
 [node name="TestEnemy" parent="." instance=ExtResource("3_7gkfr")]

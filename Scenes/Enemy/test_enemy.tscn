@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://b0r2j6s5otfv0"]
+
+[ext_resource type="Script" path="res://Scenes/Enemy/TestEnemy.gd" id="1_gxq5s"]
+[ext_resource type="Texture2D" uid="uid://ca750ko1sasnt" path="res://Assets/Textures/Enemy/cyclops.png" id="1_yv7cs"]
+[ext_resource type="Script" uid="uid://d1ert0mu20i6b" path="res://Scripts/Utils/HurtBox/BaseHurtBox.gd" id="3_c2cws"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_onngh"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lye2c"]
+size = Vector2(45, 40)
+
+[node name="TestEnemy" type="CharacterBody2D" groups=["enemy"]]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_gxq5s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_onngh")
+disabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_yv7cs")
+hframes = 2
+
+[node name="EnemyHurtBox" type="Area2D" parent="." node_paths=PackedStringArray("host") groups=["hurt_box_enemy"]]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("3_c2cws")
+hurt_box_type = 1
+host = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyHurtBox"]
+shape = SubResource("RectangleShape2D_lye2c")
+debug_color = Color(0.26805684, 0.6325634, 0.08077299, 0.41960785)
+
+[node name="DisableTimer" type="Timer" parent="EnemyHurtBox"]
+
+[connection signal="area_entered" from="EnemyHurtBox" to="EnemyHurtBox" method="_on_area_entered"]
+[connection signal="area_shape_entered" from="EnemyHurtBox" to="EnemyHurtBox" method="_on_area_shape_entered"]
+[connection signal="body_entered" from="EnemyHurtBox" to="EnemyHurtBox" method="_on_body_entered"]

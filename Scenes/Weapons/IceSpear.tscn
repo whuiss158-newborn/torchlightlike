@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cevbgmq4j7asc"]
+
+[ext_resource type="PackedScene" uid="uid://f5xcvhpv7dme" path="res://Scenes/Weapons/BaseBulletWeapon.tscn" id="1_tw1ib"]
+[ext_resource type="Resource" uid="uid://byo0gn3cuk0w0" path="res://Sources/res/weapons/IceSpear.tres" id="2_8gity"]
+[ext_resource type="Texture2D" uid="uid://7caxkjg4w4h0" path="res://Assets/Textures/Items/Weapons/ice_spear.png" id="2_we2ug"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_we2ug"]
+size = Vector2(6.3639617, 33.94113)
+
+[node name="IceSpear" instance=ExtResource("1_tw1ib")]
+config = ExtResource("2_8gity")
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_we2ug")
+
+[node name="CollisionShape2D" parent="WeaponHitBox" index="0"]
+position = Vector2(0.7499998, -0.7499998)
+rotation = 2.3561945
+scale = Vector2(0.9999999, 0.9999999)
+shape = SubResource("RectangleShape2D_we2ug")
+debug_color = Color(0.95921665, 0.029452361, 0.5094027, 0.41960785)
+
+[node name="VisibleOnScreenEnabler2D" parent="." index="2"]
+rotation = 2.3561945
+rect = Rect2(-3.882153, -15.90868, 5.672737, 32.86315)

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WeaponConfig" load_steps=2 format=3 uid="uid://byo0gn3cuk0w0"]
+
+[ext_resource type="Script" uid="uid://c1prxuj4acfe2" path="res://Sources/src/WeaponConfig.gd" id="1_o6hj2"]
+
+[resource]
+script = ExtResource("1_o6hj2")
+speed = 150.0
+damage = 10
+knockback = 50.0
+lifetime = 99.0
+metadata/_custom_type_script = "uid://c1prxuj4acfe2"

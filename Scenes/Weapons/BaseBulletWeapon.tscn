@@ -1,0 +1,31 @@
+[gd_scene load_steps=7 format=3 uid="uid://f5xcvhpv7dme"]
+
+[ext_resource type="Script" uid="uid://dg4ca3etjaqav" path="res://Scripts/Weapon/WeaponBase.gd" id="1_77bfa"]
+[ext_resource type="Script" uid="uid://c1prxuj4acfe2" path="res://Sources/src/WeaponConfig.gd" id="2_hxev5"]
+[ext_resource type="Script" uid="uid://bdlolgkfkyh07" path="res://Scripts/Utils/HitBox/WeaponHitBox.gd" id="3_rojb0"]
+
+[sub_resource type="Resource" id="Resource_75f37"]
+script = ExtResource("2_hxev5")
+metadata/_custom_type_script = "uid://c1prxuj4acfe2"
+
+[sub_resource type="ImageTexture" id="ImageTexture_77bfa"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_77bfa"]
+
+[node name="BaseBulletWeapon" type="Area2D"]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("1_77bfa")
+config = SubResource("Resource_75f37")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("ImageTexture_77bfa")
+
+[node name="WeaponHitBox" type="Area2D" parent="." node_paths=PackedStringArray("host")]
+script = ExtResource("3_rojb0")
+host = NodePath("")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponHitBox"]
+shape = SubResource("CircleShape2D_77bfa")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenNotifier2D" parent="."]

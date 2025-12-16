@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://beyfhooj2dxsa"]
 
 [ext_resource type="Script" uid="uid://dg4ca3etjaqav" path="res://Scripts/Weapon/WeaponBase.gd" id="1_07f0d"]
-[ext_resource type="Resource" uid="uid://dltshjdqt2ttp" path="res://Sources/res/weapons/Bullet_Lv1.tres" id="2_spcs0"]
+[ext_resource type="Resource" uid="uid://byo0gn3cuk0w0" path="res://Sources/res/weapons/IceSpear.tres" id="2_q6nin"]
 [ext_resource type="Texture2D" uid="uid://dao17to8r7ym7" path="res://icon.svg" id="2_sxckf"]
 [ext_resource type="Script" uid="uid://bdlolgkfkyh07" path="res://Scripts/Utils/HitBox/WeaponHitBox.gd" id="4_q6nin"]
 
@@ -17,7 +17,7 @@ collision_mask = 0
 monitoring = false
 monitorable = false
 script = ExtResource("1_07f0d")
-config = ExtResource("2_spcs0")
+config = ExtResource("2_q6nin")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_q6nin")
